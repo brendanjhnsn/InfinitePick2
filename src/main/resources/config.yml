@@ -1,0 +1,8 @@
+# Configuration for allowed blocks and their maximum storage
+blocks:
+  STONE:
+    maxStorage: 1000
+  DIAMOND_ORE:
+    maxStorage: 500
+  COAL_ORE:
+    maxStorage: 1500

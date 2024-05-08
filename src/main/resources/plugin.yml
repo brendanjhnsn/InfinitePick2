@@ -1,0 +1,18 @@
+name: InfinitePick
+version: 1.0
+api-version: "1.13"
+main: org.unknowntehk.infinitepick.InfinitePick
+author: UnknownTehk
+commands:
+  infinitepick:
+    description: Base command for managing pickaxes
+    usage: "/infinitepick <create|give> [player_name] [type]"
+    aliases: [ipick]
+    permission: infinitepick.use
+permissions:
+  infinitepick.use:
+    description: Allows use of the infinite pickaxe commands
+    default: true
+  infinitepick.give:
+    description: Allows giving custom pickaxes to players
+    default: op

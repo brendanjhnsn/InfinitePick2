@@ -1,0 +1,13 @@
+pickaxes:
+  pickaxe1:
+    customModelData: 101010
+    blockType: DIAMOND_ORE
+    lore:
+      - "Infinite Diamond Pickaxe"
+      - "Only mines diamonds forever!"
+  pickaxe2:
+    customModelData: 202020
+    blockType: STONE
+    lore:
+      - "Infinite Stone Pickaxe"
+      - "Only mines stones forever!"
