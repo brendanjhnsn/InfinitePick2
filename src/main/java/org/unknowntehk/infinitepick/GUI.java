@@ -77,28 +77,28 @@ public class GUI implements Listener {
                     openGUI(player);  // Reopen the main GUI
                 } else {
                     // Handling other item interactions
-                    handleItemInteraction(player, clickedItem, inv);
+                    handleItemInteraction(player, String.valueOf(clickedItem), inv);
                 }
             }
         }
     }
 
-    private void handleItemInteraction(Player player, ItemStack clickedItem, Inventory inv) {
-        String itemName = clickedItem.getItemMeta().getDisplayName();
+    private void handleItemInteraction(Player player, String itemName, Inventory inv) {
         switch (itemName) {
             case "Base Material":
             case "Choose Base Material":
                 openMaterialMenu(player);
                 break;
             case "Set Custom Model Data":
-                awaitingInput.put(player.getUniqueId(), "modelData");
-                player.closeInventory();  // Close inventory before asking for input
-                player.sendMessage("Please enter the custom model data in chat.");
-                break;
             case "Set Lore":
-                awaitingInput.put(player.getUniqueId(), "lore");
+                awaitingInput.put(player.getUniqueId(), itemName.toLowerCase().replace(" ", ""));
                 player.closeInventory();  // Close inventory before asking for input
-                player.sendMessage("Please enter the lore in chat, use | to separate lines.");
+                player.sendMessage("Please enter the " + itemName.toLowerCase() + " in chat.");
+                break;
+            case "Create New Pickaxe":
+                awaitingInput.put(player.getUniqueId(), "newPickaxe");
+                player.closeInventory();
+                player.sendMessage("Please enter the name and material for your new pickaxe in chat, format: name,material");
                 break;
             case "Save Changes":
                 player.closeInventory();
@@ -106,6 +106,7 @@ public class GUI implements Listener {
                 break;
         }
     }
+
 
     private void handleMaterialSelection(Player player, ItemStack selectedMaterial) {
         player.sendMessage("Selected material: " + selectedMaterial.getType());
@@ -121,12 +122,11 @@ public class GUI implements Listener {
 
     private void openMaterialMenu(Player player) {
         Inventory materialInv = Bukkit.createInventory(null, 9, "Select Base Material");
-        materialInv.addItem(createItem(Material.IRON_ORE, "Iron Ore"));
-        materialInv.addItem(createItem(Material.DIAMOND, "Diamonds"));
-        materialInv.addItem(createItem(Material.REDSTONE_ORE, "Redstone Ore"));
-        materialInv.addItem(createItem(Material.NETHERRACK, "Netherrack"));
-        materialInv.addItem(createItem(Material.STONE, "Stone"));
-        materialInv.addItem(createItem(Material.GRANITE, "Granite"));
+        materialInv.addItem(createItem(Material.WOODEN_PICKAXE, "Wood Pickaxe"));
+        materialInv.addItem(createItem(Material.STONE_PICKAXE, "Stone Pickaxe"));
+        materialInv.addItem(createItem(Material.IRON_PICKAXE, "Iron Pickaxe"));
+        materialInv.addItem(createItem(Material.DIAMOND_PICKAXE, "Diamond Pickaxe"));
+        materialInv.addItem(createItem(Material.NETHERITE_PICKAXE, "Netherite Pickaxe"));
         player.openInventory(materialInv);
         materialInventories.add(materialInv);
     }
