@@ -22,17 +22,14 @@ public class PickaxeListener implements Listener {
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
         if (isCustomPickaxe(item)) {
             String pickaxeKey = getPickaxeKey(item);
-            Material storedBlock = Material.getMaterial(plugin.getConfig().getString("pickaxes." + pickaxeKey + ".stored_block"));
-            if (event.getBlock().getType() == storedBlock) {
-                event.setDropItems(false);
+            Material storedBlock = plugin.getConfigManager().getStoredBlock(pickaxeKey);
+            Material dropItem = plugin.getConfigManager().getDropItem(pickaxeKey);
 
-                // Simulate drop of the block type (e.g., Diamond Ore drops Diamond)
-                Material dropMaterial = getDropMaterial(storedBlock);
-                if (dropMaterial != null) {
-                    ItemStack dropItem = new ItemStack(dropMaterial);
-                    addItemToPickaxeStorage(item, dropItem);
-                    plugin.getDatabaseManager().savePickaxeData(item, event.getPlayer().getUniqueId().toString());
-                }
+            if (event.getBlock().getType() == storedBlock && dropItem != null) {
+                event.setDropItems(false);
+                ItemStack drop = new ItemStack(dropItem);
+                addItemToPickaxeStorage(item, drop);
+                plugin.getDatabaseManager().savePickaxeData(item, event.getPlayer().getUniqueId().toString());
             }
         }
     }
@@ -79,19 +76,6 @@ public class PickaxeListener implements Listener {
             if (inventory != null) {
                 player.openInventory(inventory.getInventory());
             }
-        }
-    }
-
-    private Material getDropMaterial(Material storedBlock) {
-        // Add logic for other block drops as needed
-        switch (storedBlock) {
-            case DIAMOND_ORE:
-                return Material.DIAMOND;
-            case COAL_ORE:
-                return Material.COAL;
-            // Add cases for other blocks and their corresponding drops
-            default:
-                return storedBlock;
         }
     }
 }

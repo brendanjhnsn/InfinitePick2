@@ -9,16 +9,18 @@ database:
 
 pickaxes:
   custom_pickaxe:
-    name: "Infinite Pickaxe"
+    name: "Custom Pickaxe"
     lore:
-      - "A magical pickaxe that stores mined blocks."
+      - "A special pickaxe"
     material: "DIAMOND_PICKAXE"
-    stored_block: "DIAMOND_ORE"
     custom_model_data: 123
+    stored_block: "DIAMOND_ORE"
+    drop_item: "DIAMOND"  # This specifies the item to be stored
   another_pickaxe:
     name: "Another Pickaxe"
     lore:
-      - "Another magical pickaxe."
+      - "Another special pickaxe"
     material: "IRON_PICKAXE"
+    custom_model_data: 456
     stored_block: "COAL_ORE"
-    custom_model_data: 124
+    drop_item: "COAL"

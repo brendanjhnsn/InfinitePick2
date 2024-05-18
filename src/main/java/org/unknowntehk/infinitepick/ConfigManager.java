@@ -58,4 +58,14 @@ public class ConfigManager {
         pickaxeInventories.putIfAbsent(pickaxeKey, new PickaxeInventory(pickaxeKey));
         return pickaxeInventories.get(pickaxeKey);
     }
+
+    public Material getStoredBlock(String pickaxeKey) {
+        String storedBlockString = plugin.getConfig().getString("pickaxes." + pickaxeKey + ".stored_block");
+        return Material.getMaterial(storedBlockString);
+    }
+
+    public Material getDropItem(String pickaxeKey) {
+        String dropItemString = plugin.getConfig().getString("pickaxes." + pickaxeKey + ".drop_item");
+        return Material.getMaterial(dropItemString);
+    }
 }
