@@ -1,8 +1,24 @@
-# Configuration for allowed blocks and their maximum storage
-blocks:
-  STONE:
-    maxStorage: 1000
-  DIAMOND_ORE:
-    maxStorage: 500
-  COAL_ORE:
-    maxStorage: 1500
+database:
+  type: "sqlite"  # "sqlite" or "mysql"
+  host: "localhost"
+  port: 3306
+  database: "minecraft"
+  username: "root"
+  password: ""
+
+
+pickaxes:
+  custom_pickaxe:
+    name: "Infinite Pickaxe"
+    lore:
+      - "A magical pickaxe that stores mined blocks."
+    material: "DIAMOND_PICKAXE"
+    stored_block: "DIAMOND_ORE"
+    custom_model_data: 123
+  another_pickaxe:
+    name: "Another Pickaxe"
+    lore:
+      - "Another magical pickaxe."
+    material: "IRON_PICKAXE"
+    stored_block: "COAL_ORE"
+    custom_model_data: 124

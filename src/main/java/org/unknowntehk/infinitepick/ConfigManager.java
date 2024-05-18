@@ -1,53 +1,61 @@
 package org.unknowntehk.infinitepick;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class ConfigManager {
-    private JavaPlugin plugin;
-    private FileConfiguration picksConfig;
-    private File picksFile;
+    private final InfinitePickaxe plugin;
+    private final HashMap<String, PickaxeInventory> pickaxeInventories = new HashMap<>();
 
-    public ConfigManager(JavaPlugin plugin) {
+    public ConfigManager(InfinitePickaxe plugin) {
         this.plugin = plugin;
-        initConfig();
-        loadPicksConfig();
     }
 
-    private void initConfig() {
+    public void loadConfig() {
         plugin.saveDefaultConfig();
     }
 
-    private void loadPicksConfig() {
-        picksFile = new File(plugin.getDataFolder(), "picks.yml");
-        if (!picksFile.exists()) {
-            try {
-                picksFile.createNewFile(); // Ensure the file exists
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public Set<String> getPickaxeNames() {
+        return plugin.getConfig().getConfigurationSection("pickaxes").getKeys(false);
+    }
+
+    public ItemStack createPickaxe(String pickaxeKey) {
+        FileConfiguration config = plugin.getConfig();
+        String path = "pickaxes." + pickaxeKey + ".";
+        String name = config.getString(path + "name");
+        List<String> lore = config.getStringList(path + "lore");
+        Material material = Material.getMaterial(config.getString(path + "material"));
+        int customModelData = config.getInt(path + "custom_model_data");
+
+        if (name == null || material == null) {
+            return null;
         }
-        picksConfig = YamlConfiguration.loadConfiguration(picksFile);
-    }
 
-    public FileConfiguration getPicksConfig() {
-        return picksConfig;
-    }
-
-    public void savePicksConfig() {
-        try {
-            picksConfig.save(picksFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        ItemStack pickaxe = new ItemStack(material);
+        ItemMeta meta = pickaxe.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(name);
+            meta.setLore(lore);
+            meta.setCustomModelData(customModelData);
+            meta.getPersistentDataContainer().set(plugin.getPickaxeKey(), PersistentDataType.STRING, pickaxeKey);
+            pickaxe.setItemMeta(meta);
         }
+
+        // Initialize the pickaxe inventory if not already done
+        pickaxeInventories.putIfAbsent(pickaxeKey, new PickaxeInventory(name));
+
+        return pickaxe;
     }
 
-    public ResourceBundle getConfig() {
-        return null;
+    public PickaxeInventory getPickaxeInventory(String pickaxeKey) {
+        pickaxeInventories.putIfAbsent(pickaxeKey, new PickaxeInventory(pickaxeKey));
+        return pickaxeInventories.get(pickaxeKey);
     }
 }
